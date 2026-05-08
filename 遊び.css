@@ -350,3 +350,14 @@ hr {
     margin-top: 20px;
   }
 }
+
+.clickable-menu {
+  color: var(--gold);
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.clickable-menu:hover {
+  color: var(--pink);
+}
