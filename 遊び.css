@@ -2,29 +2,51 @@
   box-sizing: border-box;
 }
 
+:root {
+  --bg1: #09050f;
+  --bg2: #1b0f25;
+  --panel: rgba(35, 22, 48, 0.82);
+  --panel2: rgba(255, 255, 255, 0.08);
+  --gold: #f6d27a;
+  --pink: #ff8cc6;
+  --red: #ff4d6d;
+  --cyan: #74d7ff;
+  --text: #fff8ef;
+}
+
 body {
   margin: 0;
-  font-family: sans-serif;
-  color: white;
-  background: linear-gradient(180deg, #2b173d, #100916);
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+  color: var(--text);
   min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 140, 198, 0.18), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(116, 215, 255, 0.13), transparent 35%),
+    linear-gradient(180deg, var(--bg2), var(--bg1));
 }
 
 header {
   text-align: center;
-  padding: 30px;
+  padding: 34px 20px 20px;
 }
 
 header h1 {
   margin: 0;
-  font-size: 40px;
+  font-size: 42px;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(246, 210, 122, 0.35);
+}
+
+header p {
+  color: #d8c7e8;
 }
 
 .page {
   display: none;
-  width: 95%;
-  max-width: 1300px;
-  margin: 0 auto 40px;
+  width: 94%;
+  max-width: 1280px;
+  margin: 0 auto 48px;
 }
 
 .page.active {
@@ -34,51 +56,68 @@ header h1 {
 .panel,
 .card,
 .top-menu {
-  background: rgba(255,255,255,0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  padding: 20px;
+  background: var(--panel);
+  border: 1px solid rgba(246, 210, 122, 0.18);
+  border-radius: 24px;
+  backdrop-filter: blur(14px);
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
 .center-panel {
-  max-width: 650px;
-  margin: 0 auto 20px;
+  max-width: 680px;
+  margin: 0 auto 22px;
+}
+
+h2, h3 {
+  color: var(--gold);
 }
 
 label {
   display: block;
-  margin-top: 15px;
-  margin-bottom: 5px;
+  margin-top: 16px;
+  margin-bottom: 6px;
   font-weight: bold;
+  color: #f5e7ff;
 }
 
 input,
 textarea,
 select {
   width: 100%;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
+  border: 1px solid rgba(246, 210, 122, 0.18);
+  border-radius: 14px;
+  padding: 12px 14px;
   font-size: 15px;
+  color: #1d1027;
+  background: rgba(255, 255, 255, 0.96);
 }
 
 textarea {
-  min-height: 80px;
+  min-height: 88px;
 }
 
 button {
   border: none;
   cursor: pointer;
+  transition: 0.18s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
 }
 
 .primary {
   width: 100%;
   margin-top: 15px;
-  padding: 12px;
+  padding: 13px;
   border-radius: 999px;
   font-size: 16px;
   font-weight: bold;
-  background: linear-gradient(135deg, #ffd86b, #ff95d0);
+  color: #26152f;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  box-shadow: 0 8px 22px rgba(255, 140, 198, 0.25);
 }
 
 .secondary {
@@ -89,27 +128,29 @@ button {
   font-size: 15px;
   font-weight: bold;
   color: white;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .danger-button,
 .delete {
-  background: #ff5b7a;
+  background: linear-gradient(135deg, #ff4d6d, #b51535);
   color: white;
 }
 
 .danger-button {
   width: 100%;
   margin-top: 12px;
-  padding: 12px;
+  padding: 13px;
   border-radius: 999px;
   font-weight: bold;
+  box-shadow: 0 0 18px rgba(255, 77, 109, 0.28);
 }
 
 .small-link-button {
   display: block;
   margin: 18px auto 0;
-  color: #ffd86b;
+  color: var(--gold);
   background: none;
   font-size: 14px;
   text-decoration: underline;
@@ -120,7 +161,7 @@ button {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .top-menu h2,
@@ -137,7 +178,7 @@ button {
 .menu-buttons {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
+  gap: 16px;
 }
 
 .tools {
@@ -150,15 +191,29 @@ button {
   gap: 18px;
 }
 
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(246, 210, 122, 0.08), transparent 45%);
+  pointer-events: none;
+}
+
 .card-image {
   height: 140px;
-  border-radius: 15px;
+  border-radius: 18px;
   overflow: hidden;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.09);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 45px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .card-image img {
@@ -169,11 +224,13 @@ button {
 
 .tag {
   display: inline-block;
-  padding: 5px 10px;
+  padding: 5px 11px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(246, 210, 122, 0.16);
+  color: #ffe7a5;
   margin-right: 5px;
   margin-bottom: 5px;
+  font-size: 13px;
 }
 
 .actions {
@@ -186,16 +243,17 @@ button {
 .delete {
   flex: 1;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .edit {
-  background: #a9e1ff;
+  background: linear-gradient(135deg, var(--cyan), #8df2dd);
+  color: #10202a;
 }
 
 .order-layout {
   display: grid;
-  grid-template-columns: 280px 1fr 300px;
+  grid-template-columns: 290px 1fr 310px;
   gap: 20px;
 }
 
@@ -208,48 +266,50 @@ button {
 .cart-item,
 .order-card,
 .manage-item {
-  background: rgba(255,255,255,0.12);
-  border-radius: 15px;
-  padding: 15px;
+  background: var(--panel2);
+  border: 1px solid rgba(246, 210, 122, 0.14);
+  border-radius: 18px;
+  padding: 16px;
   margin-bottom: 12px;
 }
 
 .order-card.pending {
-  border: 2px solid #ff5b7a;
+  border-left: 6px solid var(--red);
 }
 
 .order-card.making {
-  border: 2px solid #ffd86b;
+  border-left: 6px solid var(--gold);
 }
 
 .order-card.done {
-  border: 2px solid #7dffb2;
-  opacity: 0.8;
+  border-left: 6px solid #7dffb2;
+  opacity: 0.82;
 }
 
 .status-button {
   width: 100%;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 999px;
   font-weight: bold;
   margin-top: 10px;
 }
 
 .status-pending {
-  background: #ff5b7a;
+  background: var(--red);
   color: white;
 }
 
 .status-making {
-  background: #ffd86b;
+  background: var(--gold);
   color: #2b173d;
 }
 
 .option-box {
   margin-bottom: 15px;
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.08);
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(246, 210, 122, 0.12);
 }
 
 .tab-buttons {
@@ -261,14 +321,15 @@ button {
 
 .tab-button {
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 999px;
   font-weight: bold;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255, 255, 255, 0.14);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .tab-button.active {
-  background: linear-gradient(135deg, #ffd86b, #ff95d0);
+  background: linear-gradient(135deg, var(--gold), var(--pink));
   color: #1d1027;
 }
 
@@ -280,15 +341,16 @@ button {
   display: block;
 }
 
+/* 緊急通知：右上の小さめ通知 */
 .emergency-overlay {
   position: fixed;
-  inset: 0;
+  top: 18px;
+  right: 18px;
   z-index: 9999;
-  background: rgba(0,0,0,0.78);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  width: min(360px, calc(100vw - 36px));
+  background: transparent;
+  display: block;
+  pointer-events: none;
 }
 
 .emergency-overlay.hidden {
@@ -296,41 +358,45 @@ button {
 }
 
 .emergency-popup {
-  width: min(520px, 95vw);
-  background: linear-gradient(180deg, #ff3c5f, #8b1024);
-  border: 4px solid #ffd86b;
-  border-radius: 25px;
-  padding: 30px;
+  pointer-events: auto;
+  background: linear-gradient(160deg, rgba(80, 8, 20, 0.96), rgba(35, 12, 48, 0.96));
+  border: 2px solid var(--gold);
+  border-radius: 22px;
+  padding: 20px;
   text-align: center;
-  box-shadow: 0 0 40px rgba(255, 80, 100, 0.9);
-  animation: emergencyPop 0.2s ease-out;
+  box-shadow:
+    0 0 24px rgba(255, 77, 109, 0.48),
+    0 14px 30px rgba(0, 0, 0, 0.45);
+  animation: emergencySlide 0.25s ease-out;
 }
 
 .emergency-popup h1 {
-  margin-top: 0;
-  font-size: 34px;
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: #ffe7a5;
 }
 
 .emergency-popup p {
-  font-size: 24px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.65;
   font-weight: bold;
+  margin: 8px 0 16px;
 }
 
-@keyframes emergencyPop {
+@keyframes emergencySlide {
   from {
-    transform: scale(0.75);
+    transform: translateX(28px);
     opacity: 0;
   }
   to {
-    transform: scale(1);
+    transform: translateX(0);
     opacity: 1;
   }
 }
 
 hr {
   border: none;
-  border-top: 1px solid rgba(255,255,255,0.25);
+  border-top: 1px solid rgba(255,255,255,0.22);
   margin: 25px 0;
 }
 
@@ -348,5 +414,9 @@ hr {
   .cart-panel {
     position: static;
     margin-top: 20px;
+  }
+
+  header h1 {
+    font-size: 32px;
   }
 }
