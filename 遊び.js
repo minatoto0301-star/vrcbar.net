@@ -14,6 +14,7 @@ let optionChoicesCache = [];
 let selectedCustomerName = "";
 let ordersChannel = null;
 let emergencyChannel = null;
+let focusedMenuId = "";
 
 const $ = id => document.getElementById(id);
 
@@ -52,6 +53,21 @@ function esc(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function menuLinkHtml(item) {
+  if (item.id && !String(item.id).startsWith("normal-")) {
+    return `
+      <span
+        class="clickable-menu"
+        onclick="openMenuFromOrder('${item.id}')"
+      >
+        ${esc(item.name)}
+      </span>
+    `;
+  }
+
+  return esc(item.name);
 }
 
 async function openPage(pageName, renderFunction) {
@@ -265,6 +281,7 @@ $("loginButton").onclick = async () => {
   currentGroupId = String(data.id);
   currentGroupName = data.name;
   selectedCustomerName = "";
+  focusedMenuId = "";
 
   $("currentGroupText").textContent =
     "現在のグループ：" + currentGroupName;
@@ -359,11 +376,14 @@ $("logoutButton").onclick = () => {
   currentGroupName = "";
   cart = [];
   selectedCustomerName = "";
+  focusedMenuId = "";
 
   showPage("login");
 };
 
 $("goListButton").onclick = async () => {
+  focusedMenuId = "";
+  $("search").value = "";
   await openPage("list", renderMenus);
 };
 
@@ -422,19 +442,28 @@ async function loadMenus() {
 
 async function renderMenus() {
   const menus = await loadMenus();
-  const keyword = $("search").value.toLowerCase();
 
-  const filtered = menus.filter(menu => {
-    return `
-      ${menu.name || ""}
-      ${menu.item_type || ""}
-      ${menu.category || ""}
-      ${menu.taste || ""}
-      ${menu.description || ""}
-    `
-      .toLowerCase()
-      .includes(keyword);
-  });
+  let filtered = menus;
+
+  if (focusedMenuId) {
+    filtered = menus.filter(menu =>
+      String(menu.id) === String(focusedMenuId)
+    );
+  } else {
+    const keyword = $("search").value.toLowerCase();
+
+    filtered = menus.filter(menu => {
+      return `
+        ${menu.name || ""}
+        ${menu.item_type || ""}
+        ${menu.category || ""}
+        ${menu.taste || ""}
+        ${menu.description || ""}
+      `
+        .toLowerCase()
+        .includes(keyword);
+    });
+  }
 
   if (filtered.length === 0) {
     $("menuList").innerHTML =
@@ -456,7 +485,7 @@ async function renderMenus() {
 
       <p>${esc(menu.description)}</p>
 
-      <details>
+      <details ${focusedMenuId ? "open" : ""}>
         <summary>詳細を見る</summary>
         <p><b>内容：</b><br>${esc(menu.bottles)}</p>
         <p><b>作り方：</b><br>${esc(menu.recipe)}</p>
@@ -475,7 +504,19 @@ async function renderMenus() {
   `).join("");
 }
 
-$("search").addEventListener("input", renderMenus);
+window.openMenuFromOrder = async id => {
+  focusedMenuId = String(id);
+  $("search").value = "";
+
+  showPage("list");
+
+  await renderMenus();
+};
+
+$("search").addEventListener("input", () => {
+  focusedMenuId = "";
+  renderMenus();
+});
 
 $("cocktailForm").onsubmit = async event => {
   event.preventDefault();
@@ -510,6 +551,7 @@ $("cocktailForm").onsubmit = async event => {
   }
 
   resetRegisterForm();
+  focusedMenuId = "";
   await renderMenus();
   showPage("list");
 };
@@ -557,6 +599,7 @@ window.deleteMenu = async id => {
     return;
   }
 
+  focusedMenuId = "";
   await renderMenus();
 };
 
@@ -1251,7 +1294,7 @@ async function renderReceivePage() {
         <ul>
           ${(order.items || []).map(item => `
             <li>
-              ${esc(item.name)} / ${esc(item.item_type)}
+              ${menuLinkHtml(item)} / ${esc(item.item_type)}
 
               ${
                 item.options && item.options.length > 0
@@ -1327,7 +1370,7 @@ async function renderHistoryPage() {
         <ul>
           ${(order.items || []).map(item => `
             <li>
-              ${esc(item.name)} / ${esc(item.item_type)}
+              ${menuLinkHtml(item)} / ${esc(item.item_type)}
 
               ${
                 item.options && item.options.length > 0
